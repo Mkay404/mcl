@@ -18,6 +18,40 @@ MAJOR.MINOR.PATCH
 
 ## Version History
 
+### 0.5.0 - Minor Release
+
+**Release Date:** 2025-11-23  
+**Status:** Development
+
+**Features:**
+
+- implement user signup page
+- implement email/password and username/password login
+- add OAuth callback route to exchange code for session
+
+**Chores:**
+
+- Add License and Cla Files
+- add --webpack to package.json to use webpack instead of turbopack
+- Update `env.exmaple` template
+- Run prettier in repo
+- Bump version to 0.5.0
+
+**Files Created:**
+
+- `app/login/page.tsx`
+- `app/signup/page.tsx`
+- `app/auth/callback/route.ts`
+- `CLA.md`
+- `LICENSE`
+
+**Files Modified:**
+
+- `package.json`
+- `env.example`
+- `package-lock.json`
+- `CHANGELOG.md`
+
 ### 0.4.0 - Minor Release
 
 **Release Date:** 2025-11-22  
