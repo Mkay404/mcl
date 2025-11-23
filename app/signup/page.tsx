@@ -1,21 +1,21 @@
-"use client"
+'use client'
 
-import { createClient } from "@/lib/supabase/client"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { AlertCircle, CheckCircle } from "lucide-react"
+import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { AlertCircle, CheckCircle } from 'lucide-react'
 
 export default function SignUpPage() {
-  const [fullName, setFullName] = useState("")
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
+  const [fullName, setFullName] = useState('')
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [emailConfirmationSent, setEmailConfirmationSent] = useState(false)
@@ -28,7 +28,7 @@ export default function SignUpPage() {
     setError(null)
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match")
+      setError('Passwords do not match')
       setIsLoading(false)
       return
     }
@@ -38,25 +38,26 @@ export default function SignUpPage() {
         email,
         password,
         options: {
-          emailRedirectTo: process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || `${window.location.origin}/`,
+          emailRedirectTo:
+            process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || `${window.location.origin}/`,
         },
       })
       if (authError) throw authError
 
       if (authData.user) {
-        const { error: profileError } = await supabase.from("users").insert({
+        const { error: profileError } = await supabase.from('users').insert({
           id: authData.user.id,
           email,
           username,
-          first_name: fullName.split(" ")[0],
-          last_name: fullName.split(" ").slice(1).join(" "),
+          first_name: fullName.split(' ')[0],
+          last_name: fullName.split(' ').slice(1).join(' '),
         })
         if (profileError) throw profileError
       }
 
       setEmailConfirmationSent(true)
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred")
+      setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {
       setIsLoading(false)
     }
@@ -76,14 +77,16 @@ export default function SignUpPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-foreground">
-                We've sent a verification link to <strong>{email}</strong>. Click the link in the email to complete your
-                account setup.
+                We've sent a verification link to <strong>{email}</strong>. Click the link in the
+                email to complete your account setup.
               </p>
               <p className="text-sm text-muted-foreground">
                 Once verified, you can start browsing and contributing resources!
               </p>
               <Link href="/browse/faculties" className="block">
-                <Button className="w-full bg-primary hover:bg-secondary">Continue to Library</Button>
+                <Button className="w-full bg-primary hover:bg-secondary">
+                  Continue to Library
+                </Button>
               </Link>
             </CardContent>
           </Card>
@@ -94,7 +97,7 @@ export default function SignUpPage() {
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10 p-6 md:p-10">
-            <div className="w-full max-w-md text-center">
+      <div className="w-full max-w-md text-center">
         <img src="/logo.svg" alt="MCL" className="h-20 w-auto mx-auto mb-4 object-contain" />
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2 text-center">
@@ -117,7 +120,7 @@ export default function SignUpPage() {
                     placeholder="Adetayo Ade"
                     required
                     value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
+                    onChange={e => setFullName(e.target.value)}
                     className="border-primary/30"
                   />
                 </div>
@@ -129,7 +132,7 @@ export default function SignUpPage() {
                     placeholder="Spectra010s"
                     required
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={e => setUsername(e.target.value)}
                     className="border-primary/30"
                   />
                 </div>
@@ -141,7 +144,7 @@ export default function SignUpPage() {
                     placeholder="you@email.com"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                     className="border-primary/30"
                   />
                 </div>
@@ -153,7 +156,7 @@ export default function SignUpPage() {
                     placeholder="Create a strong password"
                     required
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     className="border-primary/30"
                   />
                 </div>
@@ -165,7 +168,7 @@ export default function SignUpPage() {
                     placeholder="Confirm your password"
                     required
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onChange={e => setConfirmPassword(e.target.value)}
                     className="border-primary/30"
                   />
                 </div>
@@ -175,13 +178,17 @@ export default function SignUpPage() {
                     <p className="text-sm text-red-800">{error}</p>
                   </div>
                 )}
-                <Button type="submit" className="w-full bg-primary hover:bg-secondary text-white" disabled={isLoading}>
-                  {isLoading ? "Creating account..." : "Sign up"}
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-secondary text-white"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Creating account...' : 'Sign up'}
                 </Button>
               </form>
 
               <div className="mt-4 text-center text-sm">
-                Already have an account?{" "}
+                Already have an account?{' '}
                 <Link href="/login" className="text-primary font-semibold hover:underline">
                   Sign in
                 </Link>
