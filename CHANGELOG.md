@@ -4,7 +4,7 @@
 
 This document summarizes all changes made to My Campus Library (MCL) since the initial commit.
 
-## Current Version: v0.4.0
+## Current Version: v0.6.0
 
 MCL follows [Semantic Versioning](https://semver.org/) (SemVer) for version management.
 
@@ -17,6 +17,36 @@ MAJOR.MINOR.PATCH
 - **PATCH**: Bug fixes, backward compatible
 
 ## Version History
+
+### 0.6.0 - Minor Release
+
+**Release Date:** 2025-11-24
+**Status:** Development
+
+**Features:**
+
+- Add Google and GitHub OAuth Signup handlers
+- Add Google and GitHub OAuth login handlers
+- Add reusable PasswordInput component
+
+**Chores:**
+
+- update `global.css` to use site brand colors
+- Run prettier in repo
+- Bump version to 0.6.0
+
+**Files Created:**
+
+- `components/ui/passwordInput`
+
+**Files Modified:**
+
+- `app/login/page.tsx`
+- `app/signup/page.tsx`
+- `app/global.css`
+- `package.json`
+- `package-lock.json`
+- `CHANGELOG.md`
 
 ### 0.5.0 - Minor Release
 
