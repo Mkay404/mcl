@@ -4,7 +4,7 @@
 
 This document summarizes all changes made to My Campus Library (MCL) since the initial commit.
 
-## Current Version: v0.6.0
+## Current Version: v0.7.0
 
 MCL follows [Semantic Versioning](https://semver.org/) (SemVer) for version management.
 
@@ -17,6 +17,50 @@ MAJOR.MINOR.PATCH
 - **PATCH**: Bug fixes, backward compatible
 
 ## Version History
+
+### 0.7.0 - Minor Release
+
+**Release Date:** 2025-11-24
+**Status:** Development
+
+**Features:**
+
+- Add components separator ui
+- Add footer component
+- Add Header component
+- Add Sidebar component
+- Add Vercel Analytics inside layout
+- Add mockup `upload` page to test middleware
+
+**fix:**
+
+- Protect /upload route with middleware
+
+**Chores:**
+
+- Run prettier in repo
+- Bump version to 0.7.0
+
+**Refractor:**
+
+- Replace default Next.js root layout with custom LayoutContent
+
+**Files Created:**
+
+- `components/ui/separator.tsx`
+- `components/Header.tsx`
+- `components/Footer.tsx`
+- `components/Sidebar.tsx`
+- `components/LayoutContent.tsx`
+- `app/upload/page.tsx`
+- `middleware.ts`
+
+**Files Modified:**
+
+- `layout.tsx`
+- `package.json`
+- `package-lock.json`
+- `CHANGELOG.md`
 
 ### 0.6.0 - Minor Release
 
@@ -31,7 +75,7 @@ MAJOR.MINOR.PATCH
 
 **Chores:**
 
-- update `global.css` to use site brand colors
+- Update `global.css` to use site brand colors
 - Run prettier in repo
 - Bump version to 0.6.0
 
@@ -55,14 +99,14 @@ MAJOR.MINOR.PATCH
 
 **Features:**
 
-- implement user signup page
-- implement email/password and username/password login
-- add OAuth callback route to exchange code for session
+- Implement user signup page
+- Implement email/password and username/password login
+- Add OAuth callback route to exchange code for session
 
 **Chores:**
 
 - Add License and Cla Files
-- add --webpack to package.json to use webpack instead of turbopack
+- Add --webpack to package.json to use webpack instead of turbopack
 - Update `env.exmaple` template
 - Run prettier in repo
 - Bump version to 0.5.0
