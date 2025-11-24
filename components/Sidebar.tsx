@@ -102,55 +102,56 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
 
         <div className="flex-1 p-4 space-y-6">
           {/* Browse Section */}
-          <div>              <h3 className="text-sm font-semibold text-sidebar-foreground mb-3 flex items-center gap-1">
-
-                <BookOpen className="w-4 h-4" />
-                Browse
-              </h3>
-                         <div className="bg-sidebar-border border-t-2" ></div>
-            
-              <div className="mt-3 space-y-2 pl-4">
-                <Link
-                  href="/browse/faculties"
-                  className="text-sm text-sidebar-foreground/70 hover:text-sidebar-primary block"
-                  onClick={onMobileClose}
-                >
-                  Faculties
-                </Link>
-              </div>
-            
+          <div>
+            {' '}
+            <h3 className="text-sm font-semibold text-sidebar-foreground mb-3 flex items-center gap-1">
+              <BookOpen className="w-4 h-4" />
+              Browse
+            </h3>
+            <div className="bg-sidebar-border border-t-2"></div>
+            <div className="mt-3 space-y-2 pl-4">
+              <Link
+                href="/browse/faculties"
+                className="text-sm text-sidebar-foreground/70 hover:text-sidebar-primary block"
+                onClick={onMobileClose}
+              >
+                Faculties
+              </Link>
+            </div>
           </div>
 
           {/* Contribute Section */}
-            <div>
-              <h3 className="text-sm font-semibold text-sidebar-foreground mb-3 flex items-center gap-1">
-                <Plus className="w-4 h-4" />
-                Contribute
-              </h3>
-             <div className="bg-sidebar-border border-t-2" ></div>
-              <div className="mt-3 space-y-2 pl-4">
-                <Link
-                  href="/upload"
-                  className="text-sm text-sidebar-foreground/70 hover:text-sidebar-primary block"
-                  onClick={onMobileClose}
-                >
-                  Add a PDF
-                </Link>
-                <Link
-                  href="/upload"
-                  className="text-sm text-sidebar-foreground/70 hover:text-sidebar-primary block"
-                  onClick={onMobileClose}
-                >
-                  Add a Resource
-                </Link>
-              </div>
+          <div>
+            <h3 className="text-sm font-semibold text-sidebar-foreground mb-3 flex items-center gap-1">
+              <Plus className="w-4 h-4" />
+              Contribute
+            </h3>
+            <div className="bg-sidebar-border border-t-2"></div>
+            <div className="mt-3 space-y-2 pl-4">
+              <Link
+                href="/upload"
+                className="text-sm text-sidebar-foreground/70 hover:text-sidebar-primary block"
+                onClick={onMobileClose}
+              >
+                Add a PDF
+              </Link>
+              <Link
+                href="/upload"
+                className="text-sm text-sidebar-foreground/70 hover:text-sidebar-primary block"
+                onClick={onMobileClose}
+              >
+                Add a Resource
+              </Link>
             </div>
-        
+          </div>
 
           {/* Resources Section */}
           <div>
-              <h3 className="text-sm font-semibold text-sidebar-foreground mb-3 flex items-center gap-1"><Folder className="w-4 h-4" />Resources</h3>
-             <div className="bg-sidebar-border border-t-2" ></div>
+            <h3 className="text-sm font-semibold text-sidebar-foreground mb-3 flex items-center gap-1">
+              <Folder className="w-4 h-4" />
+              Resources
+            </h3>
+            <div className="bg-sidebar-border border-t-2"></div>
             <div className=" mt-3 space-y-2 pl-4">
               <Link
                 href="https://github.com/mycampuslib/mcl"
@@ -176,7 +177,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
         {/* Settings - Only if Logged In */}
         {user && (
           <div className="mt-3 p-4 space-y-2">
-             <div className="bg-sidebar-border border-t-2" ></div>
+            <div className="bg-sidebar-border border-t-2"></div>
             <Link
               href="/settings"
               className="flex items-center gap-2 text-sm text-sidebar-foreground hover:text-sidebar-primary"
