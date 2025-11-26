@@ -44,7 +44,7 @@ export function Header({ onMobileMenuToggle }: HeaderProps) {
   return (
     <header className="border-b border-border bg-background sticky top-0 z-50">
       <div className="flex items-center justify-between px-4 py-3 md:px-6">
-        {!mobileSearchOpen && (
+        {!mobileSearchOpen ? (
           <Link href="/" className="flex items-center gap-2 font-bold text-lg">
             <Image
               src="/logo.svg"
@@ -55,9 +55,7 @@ export function Header({ onMobileMenuToggle }: HeaderProps) {
             />
             <span className="inline text-foreground">My Campus Library</span>
           </Link>
-        )}
-
-        {mobileSearchOpen && (
+        ) : (
           <form onSubmit={handleSearch} className="flex-1 md:hidden">
             <div className="relative w-full">
               <Input
