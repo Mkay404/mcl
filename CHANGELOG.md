@@ -4,7 +4,7 @@
 
 This document summarizes all changes made to My Campus Library (MCL) since the initial commit.
 
-## Current Version: v0.7.0
+## Current Version: v0.8.0
 
 MCL follows [Semantic Versioning](https://semver.org/) (SemVer) for version management.
 
@@ -17,6 +17,48 @@ MAJOR.MINOR.PATCH
 - **PATCH**: Bug fixes, backward compatible
 
 ## Version History
+
+### 0.8.0 - Minor Release
+
+**Release Date:** 2025-11-27
+**Status:** Development
+
+**Features:**
+
+- Add custom homepage for MCL
+- Add ResourceCarousel component for course ResourceCarousel
+- Implement hierarchical browse system (faculty → department → level → course)"
+
+- **Chores:**
+
+- Setup Vitest and React Testing library
+- Rename name to `short_name` and add `full_name` column to faculties and departments
+- Add aria-labels to buttons in `components/ResourceCarousel.tsx`
+- Bump version to 0.8.0
+
+**Test:**
+
+- Add unit tests for ResourceCarousel component
+
+**Files Created:**
+
+- `vitest.config.ts`
+- `vitest.setup.ts`
+- `app/browse/faculties/page.tsx`
+- `app/browse/faculties/[facultyId]/page.tsx`
+- `app/browse/faculties/[facultyId]/departments/[departmentId]/page.tsx`
+- `app/browse/faculties/[facultyId]/departments/[departmentId]/levels/[levelId]/page.tsx`
+- `app/browse/faculties/[facultyId]/departments/[departmentId]/levels/[levelId]/courses/[courseId]/page.tsx`
+- `scripts/update_faculties_departmentals_names.sql`
+- `components/ResourceCarousel.tsx`
+- `test/components/ResourceCarousel.test.tsx`
+
+**Files Modified:**
+
+- `app/page.tsx`
+- `package.json`
+- `package-lock.json`
+- `CHANGELOG.md`
 
 ### 0.7.0 - Minor Release
 
@@ -57,7 +99,7 @@ MAJOR.MINOR.PATCH
 
 **Files Modified:**
 
-- `layout.tsx`
+- `app/layout.tsx`
 - `package.json`
 - `package-lock.json`
 - `CHANGELOG.md`
