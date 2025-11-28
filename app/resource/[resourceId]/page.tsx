@@ -1,0 +1,196 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Heart, Download, BookmarkPlus, ChevronLeft } from 'lucide-react'
+import { useParams } from 'next/navigation'
+
+export default function ResourcePage() {
+  const params = useParams()
+  const resourceId = params.resourceId as string
+  const [resource, setResource] = useState<any>(null)
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+        setUser(user)
+
+        const { data: resourceData, error: resourceError } = await supabase
+          .from('resources')
+          .select(
+            `
+    *,
+    course_id(
+      id,
+      course_code,
+      course_title,
+      academic_level_id(
+        level_number,
+        department_id(
+          full_name
+        )
+      )
+    ),
+    resource_keywords(keyword),
+    uploader:uploaded_by(
+    username
+    )
+  `,
+          )
+          .eq('id', resourceId)
+          .eq('is_approved', true)
+          .single()
+
+        if (resourceError) throw resourceError
+        setResource(resourceData)
+
+        await supabase.from('view_history').insert({
+          resource_id: resourceId,
+          user_id: user?.id || null,
+        })
+      } catch (error) {
+        console.error('Error fetching resource:', JSON.stringify(error, null, 2))
+
+        console.error('Error fetching resource:', error instanceof Error ? error.message : error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [resourceId, supabase])
+
+  if (loading) {
+    return (
+      <main className="flex-1 flex items-center justify-center py-20">
+        <p>Loading...</p>
+      </main>
+    )
+  }
+
+  if (!resource) {
+    return (
+      <main className="flex-1 flex items-center justify-center py-20">
+        <p>Resource not found</p>
+      </main>
+    )
+  }
+
+  const course = resource.course_id
+  const level = course?.academic_level_id
+  const dept = level?.department_id
+  const uploaderUsername = resource.uploader.username || 'Anonymous'
+
+  return (
+    <>
+      <main className="flex-1 max-w-4xl mx-auto px-4 py-12 md:px-6">
+        <Link
+          href="/browse/faculties"
+          className="flex items-center gap-2 text-primary hover:underline mb-6"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back to Browse
+        </Link>
+
+        {/* Resource Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-foreground mb-4">{resource.title}</h1>
+
+          {/* Course Info */}
+          {course && (
+            <div className="text-muted-foreground mb-4">
+              <p>
+                {course.course_code}: {course.course_title}
+              </p>
+              <p>
+                {level?.level_number} Level • {dept?.full_name}
+              </p>
+            </div>
+          )}
+
+          {/* Metadata Row */}
+          <div className="flex flex-wrap gap-6 py-4 border-b border-border">
+            <div>
+              <p className="text-sm text-muted-foreground">File Type</p>
+              <p className="font-semibold">{resource.file_type?.toUpperCase() || 'FILE'}</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">File Size</p>
+              <p className="font-semibold">
+                {(resource.file_size_bytes / 1024 / 1024).toFixed(2)} MB
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Views</p>
+              <p className="font-semibold">{resource.view_count || 0}</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Uploaded by</p>
+              <p className="font-semibold">{uploaderUsername}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Description */}
+        {resource.description && (
+          <Card className="p-4 mb-8">
+            <h2 className="font-semibold text-lg">Description</h2>
+            <p className="text-foreground whitespace-pre-wrap line-clamp-2">
+              {resource.description}
+            </p>
+          </Card>
+        )}
+
+        {/* Keywords */}
+        {resource.resource_keywords?.length > 0 && (
+          <Card className="p-6 mb-8">
+            <h2 className="font-semibold text-lg mb-3">Keywords</h2>
+            <div className="flex flex-wrap gap-2">
+              {resource.resource_keywords.map((kw, idx) => (
+                <span
+                  key={idx}
+                  className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                >
+                  {kw.keyword}
+                </span>
+              ))}
+            </div>
+          </Card>
+        )}
+
+        {/* Action Buttons */}
+        {user ? (
+          <div className="flex gap-3 mb-8">
+            <Button className="flex items-center gap-2">
+              <Download className="w-4 h-4" />
+              Download
+            </Button>
+            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+              <Heart className="w-4 h-4" />
+              Favorite
+            </Button>
+            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+              <BookmarkPlus className="w-4 h-4" />
+              Bookmark
+            </Button>
+          </div>
+        ) : (
+          <Link href="/login" className="block mb-8">
+            <Button size="lg" className="w-full">
+              Login to Download
+            </Button>
+          </Link>
+        )}
+      </main>
+    </>
+  )
+}
