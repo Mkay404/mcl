@@ -33,26 +33,73 @@ export async function updateSession(request: NextRequest) {
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
-  
-const { data: profile, error } = await supabase
-    .from("users")
-    .select("role")
-    .eq("id", user.id)
-    .single();
 
-if (user && error) {
-    return new NextResponse('Internal Server Error: Could not verify permissions.', {
-        status: 500 
-    });
-}
+  if (request.nextUrl.pathname === '/admin') {
+    const forbiddenReponse = new NextResponse(
+      `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>403 – Forbidden</title>
+          <style>
+            body {
+              background: #fafafa;
+              font-family: system-ui, sans-serif;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+              margin: 0;
+            }
+            .box {
+              text-align: center;
+              padding: 40px;
+            }
+            h1 {
+              font-size: 180px;
+              margin-bottom: 10px;
+              color: #111;
+            }
+            p {
+              font-size: 40px;
+              color: #666;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="box">
+            <h1>403 Forbidden</h1>
+            <p>You do not have permission to access this page.</p>
+          </div>
+        </body>
+        </html>
+      `,
+      {
+        status: 403,
+        headers: { 'Content-Type': 'text/html' },
+      },
+    )
 
-if (request.nextUrl.pathname === '/admin') {
-  if (!user || profile.role !== "admin") {
-     return new NextResponse('Forbidden: You do not have permission to access this page.', { 
-        status: 403 
-      });
+    if (!user) {
+      return forbiddenReponse
+    }
+
+    const { data: profile, error } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (error) {
+      return new NextResponse('Internal Server Error: Could not verify permissions.', {
+        status: 500,
+      })
+    }
+
+    if (profile.role !== 'admin') {
+      return forbiddenReponse
+    }
   }
-}
 
   return supabaseRes
 }
