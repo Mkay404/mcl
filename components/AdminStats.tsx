@@ -174,21 +174,6 @@ export default function AdminStats() {
             </Button>
           </CardContent>
         </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <SettingsIcon className="w-5 h-5" />
-              System Settings
-            </CardTitle>
-            <CardDescription>Configure system settings and preferences</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild className="w-full" variant="outline">
-              <Link href="/settings">Open Settings</Link>
-            </Button>
-          </CardContent>
-        </Card>
       </div>
     </main>
   )
