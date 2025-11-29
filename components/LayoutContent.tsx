@@ -11,8 +11,8 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
-      <div className="flex flex-1">
-        <main className="flex-1">{children}</main>
+      <div className="flex flex-1 min-h-screen">
+        <main className="flex-1 min-w-0">{children}</main>
         <Sidebar mobileOpen={mobileMenuOpen} onMobileClose={() => setMobileMenuOpen(false)} />
       </div>
       <Footer />
