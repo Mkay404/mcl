@@ -5,13 +5,14 @@ import Link from 'next/link'
 import { ChevronLeft, ChevronRight, FileText, File } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { format } from 'date-fns'
 
 interface Resource {
   id: string
   title: string
   file_type: string
   download_count: number
-  created_at: string
+  upload_date: string
 }
 
 interface ResourceCarouselProps {
@@ -109,7 +110,7 @@ export function ResourceCarousel({ title, resources }: ResourceCarouselProps) {
                     <span>
                       {resource.download_count} download{resource.download_count !== 1 ? 's' : ''}
                     </span>
-                    <span>{new Date(resource.created_at).toLocaleDateString()}</span>
+                    <span>{format(new Date(resource.upload_date), 'yyyy-MM-dd')}</span>
                   </div>
                 </div>
               </Card>

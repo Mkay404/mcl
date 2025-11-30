@@ -42,7 +42,7 @@ async function getCourseDetailPageData(
         title,
         file_type,
         download_count,
-        created_at,
+        upload_date,
         is_approved
       )
     `,
