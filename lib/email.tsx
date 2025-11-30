@@ -6,7 +6,7 @@ export async function sendRejectionEmail(
   userEmail: string,
   firstName: string,
   resourceTitle: string,
-  rejectionReason: string
+  rejectionReason: string,
 ) {
   try {
     const { data, error } = await resend.emails.send({
@@ -66,7 +66,7 @@ export async function sendApprovalEmail(
   userEmail: string,
   firstName: string,
   resourceTitle: string,
-  resourceId: string
+  resourceId: string,
 ) {
   try {
     const { data, error } = await resend.emails.send({
@@ -114,7 +114,7 @@ export async function sendApprovalEmail(
       console.error('[Email] Error sending approval email:', error)
       return false
     }
-    
+
     return true
   } catch (error) {
     console.error('[Email] Exception sending approval email:', error)
@@ -130,5 +130,5 @@ function escapeHtml(text: string): string {
     '"': '&quot;',
     "'": '&#039;',
   }
-  return text.replace(/[&<>"']/g, (char) => map[char])
+  return text.replace(/[&<>"']/g, char => map[char])
 }
