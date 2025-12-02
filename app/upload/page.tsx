@@ -200,14 +200,12 @@ export default function UploadPage() {
         throw new Error('Supabase Storage Upload Failed.')
       }
 
-      const { data: fileUrl } = supabase.storage.from('mclib').getPublicUrl(uploadData.path)
-
       const { error: insertError } = await supabase.from('resources').insert({
         title,
         description,
         course_id: course,
         file_type: autoDetectedType,
-        file_url: fileUrl.publicUrl,
+        file_url: filePath,
         file_size_bytes: file.size,
         is_approved: false,
         uploaded_by: user.id,
