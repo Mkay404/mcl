@@ -31,26 +31,26 @@ export default function ResourcePage() {
           .from('resources')
           .select(
             `
-    *,
-    user_bookmarks(
-      user_id
-    ),
-    course_id(
-      id,
-      course_code,
-      course_title,
-      academic_level_id(
-        level_number,
-        department_id(
-          full_name
-        )
-      )
-    ),
-    resource_keywords(keyword),
-    uploader:uploaded_by(
-    username
-    )
-  `,
+          *,
+          user_bookmarks(
+            user_id
+          ),
+          course_id(
+            id,
+            course_code,
+            course_title,
+            academic_level_id(
+              level_number,
+              department_id(
+                full_name
+              )
+            )
+          ),
+          resource_keywords(keyword),
+          uploader:uploaded_by(
+          username
+          )
+        `,
           )
           .eq('id', resourceId)
           .eq('is_approved', true)
