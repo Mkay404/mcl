@@ -4,7 +4,7 @@
 
 This document summarizes all changes made to My Campus Library (MCL) since the initial commit.
 
-## Current Version: v0.9.0
+## Current Version: v0.10.0
 
 MCL follows [Semantic Versioning](https://semver.org/) (SemVer) for version management.
 
@@ -17,6 +17,58 @@ MAJOR.MINOR.PATCH
 - **PATCH**: Bug fixes, backward compatible
 
 ## Version History
+
+### 0.10.0 - Minor Release
+
+**Release Date:** 2025-12-2
+**Status:** Development
+
+**Features:**
+- feat: add bookmark api route
+- feat: enable downloading and bookmarking funtions for files for authUsers
+- feat: add download function with proxy to return new Headers
+- feat: add api route for search history update 
+- feat: add fts funtion and remove view function 
+- feat: add download and bookmark function for list of files
+
+**Fix:**
+
+- fix: update upload page to use file path instead of publicUrl
+- fix: replaced view count funtion that logs bothusers and anon
+
+
+**Refractor:**
+- refactor(settings): Migrate Settings flow to Server Component architecture
+
+
+**Chores:**
+- chore: add date-fns package
+- chore: bump npm json version
+- chore: ran prettier in repo
+
+**Files Created:**
+
+- `app/settings/`
+- `scripts/fix_view_count_history_function.sql` 
+- `app/api/resources/[id]/download/route.ts`
+- `app/api/resources/[id]/bookmark/route.ts`
+- `app/api/search/route.ts`
+- `scripts/fts_full_text_search_function.sql`
+
+
+- **Files Modified:**
+
+- `lib/email.tsx`
+- `components/SettingsComponents.tsx`
+- `app/api/logout`
+- `app/api/user/update`
+- `app/resource/[resourceId]/page.tsx`
+- `app/upload/page.tsx` 
+- `scripts/schema.sql`
+- `app/search/client.tsx`
+- `package.json`
+- `package-lock.json`
+- `CHANGELOG.md`
 
 ### 0.9.0 - Minor Release
 
