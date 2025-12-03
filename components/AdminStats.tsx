@@ -1,6 +1,11 @@
+'use client'
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
+
 import {
   AlertCircle,
   FileText,
@@ -13,6 +18,8 @@ import {
 } from 'lucide-react'
 
 export default function AdminStats() {
+  const supabase = createClient()
+
   const [stats, setStats] = useState({
     totalResources: 0,
     totalUsers: 0,
@@ -42,7 +49,7 @@ export default function AdminStats() {
       const { count: pendingCount } = await supabase
         .from('resources')
         .select('*', { count: 'exact', head: true })
-        .eq('is_approved', 'false')
+        .eq('is_approved', 'true')
 
       setStats({
         totalResources: resourceCount || 0,
@@ -55,6 +62,10 @@ export default function AdminStats() {
       console.error('Error fetching stats:', error)
     }
   }
+
+  useEffect(() => {
+    fetchStats()
+  }, [])
 
   return (
     <main className="p-6 max-w-7xl mx-auto">
