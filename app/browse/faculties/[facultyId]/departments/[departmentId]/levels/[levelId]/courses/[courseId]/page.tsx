@@ -81,12 +81,7 @@ export default async function CourseDetailPage(props: PageProps) {
   const params = await props.params
   const { facultyId, departmentId, levelId, courseId } = params
 
-  const { course } = await getCourseDetailPageData(
-    facultyId,
-    departmentId,
-    levelId,
-    courseId,
-  )
+  const { course } = await getCourseDetailPageData(facultyId, departmentId, levelId, courseId)
 
   const approvedResources = course?.resources?.filter(r => r.is_approved) || []
 
