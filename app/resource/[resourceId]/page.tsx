@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Heart, Download, BookmarkPlus, ChevronLeft } from 'lucide-react'
+import { Download, BookmarkPlus, ChevronLeft } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
 
