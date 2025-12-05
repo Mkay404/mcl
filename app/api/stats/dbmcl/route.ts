@@ -17,7 +17,10 @@ async function checkAdminAuth() {
     .single()
 
   if (profileError || !profile) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  if (profile.role !== 'admin') return NextResponse.json({ error: 'Unauthorized User' }, { status: 401 })
+
+  if (profile.role !== 'admin') {
+    return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
+  }
 
   return null
 }
