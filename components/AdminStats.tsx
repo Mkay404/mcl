@@ -4,22 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
-
-import {
-  AlertCircle,
-  FileText,
-  Users,
-  Download,
-  Eye,
-  Clock,
-  CheckCircle,
-  SettingsIcon,
-} from 'lucide-react'
+import { FileText, Users, Download, Eye, Clock, CheckCircle } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function AdminStats() {
-  const supabase = createClient()
-
   const [stats, setStats] = useState({
     totalResources: 0,
     totalUsers: 0,
@@ -30,26 +18,15 @@ export default function AdminStats() {
 
   const fetchStats = async () => {
     try {
-      const { count: resourceCount } = await supabase
-        .from('resources')
-        .select('*', { count: 'exact', head: true })
+      const response = await fetch('/api/stats/dbmcl', { cache: 'no-store' })
 
-      const { count: userCount } = await supabase
-        .from('users')
-        .select('*', { count: 'exact', head: true })
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to fetch statistics')
+      }
 
-      const { count: downloadCount } = await supabase
-        .from('download_history')
-        .select('*', { count: 'exact', head: true })
-
-      const { count: viewCount } = await supabase
-        .from('view_history')
-        .select('*', { count: 'exact', head: true })
-
-      const { count: pendingCount } = await supabase
-        .from('resources')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_approved', 'true')
+      const { resourceCount, userCount, downloadCount, viewCount, pendingCount } =
+        await response.json()
 
       setStats({
         totalResources: resourceCount || 0,
@@ -60,6 +37,7 @@ export default function AdminStats() {
       })
     } catch (error) {
       console.error('Error fetching stats:', error)
+      toast.error('Error fetching stats')
     }
   }
 
