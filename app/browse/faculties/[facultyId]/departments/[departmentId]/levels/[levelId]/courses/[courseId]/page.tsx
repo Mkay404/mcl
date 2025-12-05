@@ -81,7 +81,7 @@ export default async function CourseDetailPage(props: PageProps) {
   const params = await props.params
   const { facultyId, departmentId, levelId, courseId } = params
 
-  const { dept, level, course } = await getCourseDetailPageData(
+  const { course } = await getCourseDetailPageData(
     facultyId,
     departmentId,
     levelId,
