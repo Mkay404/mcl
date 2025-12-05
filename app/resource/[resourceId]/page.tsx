@@ -10,7 +10,7 @@ import { useParams } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
 
 interface Resource {
-  id: string
+  id: number
   title: string
   description: string
   file_type: string
@@ -19,11 +19,11 @@ interface Resource {
   uploaded_by: string | null
 
   user_bookmarks: Array<{
-    user_id: string
+    user_id: number
   }>
 
   course_id: {
-    id: string
+    id: number
     course_code: string
     course_title: string
     academic_level_id: {
