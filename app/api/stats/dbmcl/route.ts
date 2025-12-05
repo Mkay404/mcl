@@ -22,7 +22,7 @@ export async function GET() {
     const { count: pendingCount } = await supabaseAdmin
       .from('resources')
       .select('*', { count: 'exact', head: true })
-      .eq('is_approved', false) // pending reviews
+      .eq('is_approved', false)
 
     return NextResponse.json({
       resourceCount,
@@ -31,7 +31,7 @@ export async function GET() {
       viewCount,
       pendingCount,
     })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
