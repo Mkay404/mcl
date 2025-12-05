@@ -8,14 +8,40 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Download, BookmarkPlus, Search, Eye } from 'lucide-react'
+import type { User } from '@supabase/supabase-js'
+
+interface Resource {
+  id: number
+  title: string
+  description: string
+  file_type: string
+  file_size_bytes: number
+  view_count: number
+  download_count: number
+  bookmark_count: number
+  isBookmarked: boolean
+  courses?: {
+    id: number
+    course_code: string
+    course_title: string
+    academic_levels: {
+      level_number: number
+      departments: {
+        id: number
+        full_name: string
+        faculty_id: number
+      }[]
+    }[]
+  }[]
+}
 
 export default function SearchClient() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const query = searchParams.get('q') || ''
   const [searchQuery, setSearchQuery] = useState(query)
-  const [results, setResults] = useState<any[]>([])
-  const [user, setUser] = useState<any>(null)
+  const [results, setResults] = useState<Resource[]>([])
+  const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(!!query)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
 
@@ -29,7 +55,7 @@ export default function SearchClient() {
       setUser(user)
     }
     getUser()
-  }, [])
+  }, [supabase.auth])
 
   useEffect(() => {
     if (!query) {
@@ -131,7 +157,7 @@ export default function SearchClient() {
     }
 
     performSearch()
-  }, [query])
+  }, [query, user])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -226,7 +252,7 @@ export default function SearchClient() {
       ) : query ? (
         <>
           <h2 className="text-2xl font-bold text-foreground mb-6">
-            {results.length} Result{results.length !== 1 ? 's' : ''} for "{query}"
+            {results.length} Result{results.length !== 1 ? 's' : ''} for &quot;{query}&quot;
           </h2>
 
           <div className="space-y-4">
