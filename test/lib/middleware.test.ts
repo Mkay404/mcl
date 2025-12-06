@@ -1,6 +1,6 @@
 import { updateSession } from '@/lib/supabase/middleware'
 import { NextResponse, type NextRequest } from 'next/server'
-import { vi, describe, it, expect, beforeEach, Mock, SpyInstance } from 'vitest'
+import { vi, describe, it, expect, beforeEach, Mock } from 'vitest'
 
 vi.mock('@supabase/ssr', () => ({
   createServerClient: vi.fn(() => ({
