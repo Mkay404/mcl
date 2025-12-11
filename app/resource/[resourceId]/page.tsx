@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card'
 import { Download, BookmarkPlus, ChevronLeft } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
-import LinkifiedText from "@/components/LinkifiedText"
+import LinkifiedText from '@/components/LinkifiedText'
 
 interface Resource {
   id: number
@@ -229,8 +229,8 @@ export default function ResourcePage() {
           <Card className="p-4 mb-8">
             <h2 className="font-semibold text-lg">Description</h2>
             <LinkifiedText
-            className="leading-relaxed text-foreground whitespace-pre-wrap"
-             text={resource.description}
+              className="leading-relaxed text-foreground whitespace-pre-wrap"
+              text={resource.description}
             />
           </Card>
         )}
