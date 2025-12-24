@@ -45,14 +45,36 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const { dept, level } = await getCoursePageData(facultyId, departmentId, levelId)
 
   const isGeneralCourse = dept?.full_name === 'General Courses'
+  const title = isGeneralCourse
+    ? `${level?.level_number} Lvl ${dept?.full_name} - My Campus Library`
+    : `${level?.level_number} Lvl ${dept?.full_name} Department Courses - My Campus Library`
+  const description = isGeneralCourse
+    ? `Explore courses within the ${level?.level_number} lvl of ${dept?.full_name}`
+    : `Explore courses within the ${level?.level_number} lvl of ${dept?.full_name} department`
 
   return {
-    title: isGeneralCourse
-      ? `${level?.level_number} Lvl ${dept?.full_name} - My Campus Library`
-      : `${level?.level_number} Lvl ${dept?.full_name} Department Courses - My Campus Library`,
-    description: isGeneralCourse
-      ? `Explore courses within the ${level?.level_number} lvl of ${dept?.full_name}`
-      : `Explore courses within the ${level?.level_number} lvl of ${dept?.full_name} department`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: `/browse/faculties/${facultyId}/departments/${departmentId}/levels/${levelId}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [
+        `/browse/faculties/${facultyId}/departments/${departmentId}/levels/${levelId}/opengraph-image`,
+      ],
+    },
   }
 }
 
