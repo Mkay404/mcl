@@ -48,6 +48,24 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   return {
     title: `${faculty?.full_name} - My Campus Library`,
     description: `Explore departments and General Courses within the ${faculty?.full_name}`,
+    openGraph: {
+      title: `${faculty?.full_name} - My Campus Library`,
+      description: `Explore departments and General Courses within the ${faculty?.full_name}`,
+      images: [
+        {
+          url: `/browse/faculties/${facultyId}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${faculty?.full_name} - My Campus Library`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${faculty?.full_name} - My Campus Library`,
+      description: `Explore departments and General Courses within the ${faculty?.full_name}`,
+      images: [`/browse/faculties/${facultyId}/opengraph-image`],
+    },
   }
 }
 

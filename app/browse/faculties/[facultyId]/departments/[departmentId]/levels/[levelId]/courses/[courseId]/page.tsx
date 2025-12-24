@@ -69,12 +69,33 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
     courseId,
   )
   const isGeneralCourse = dept?.full_name === 'General Courses'
+  const description = `Explore the list of resources for ${course?.course_title} in ${level?.level_number} lvl${
+    isGeneralCourse ? '' : ` for ${dept?.full_name} department`
+  }`
 
   return {
     title: `${course?.course_title} | ${level?.level_number} lvl - My Campus Library`,
-    description: `Explore the list of resources for ${course?.course_title} in ${level?.level_number} lvl${
-      isGeneralCourse ? '' : ` for ${dept?.full_name} department`
-    }`,
+    description,
+    openGraph: {
+      title: `${course?.course_title} | ${level?.level_number} lvl - My Campus Library`,
+      description,
+      images: [
+        {
+          url: `/browse/faculties/${facultyId}/departments/${departmentId}/levels/${levelId}/courses/${courseId}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${course?.course_title} - My Campus Library`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${course?.course_title} | ${level?.level_number} lvl - My Campus Library`,
+      description,
+      images: [
+        `/browse/faculties/${facultyId}/departments/${departmentId}/levels/${levelId}/courses/${courseId}/opengraph-image`,
+      ],
+    },
   }
 }
 
