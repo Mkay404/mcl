@@ -111,7 +111,7 @@ export default function NewDepartmentPage() {
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div>
                   <Label htmlFor="description" className="text-sm font-semibold mb-2 block">
                     Description
                   </Label>

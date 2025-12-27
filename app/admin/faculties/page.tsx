@@ -76,7 +76,6 @@ export default function AdminFacultiesPage() {
       await fetchFaculties()
     } catch (error) {
       console.error('Error deleting department:', error)
-      toast.error('Failed to delete faculty')
     }
   }
 

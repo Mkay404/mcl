@@ -43,13 +43,20 @@ export default function NewLevelPage() {
         body: JSON.stringify({ level_number: Number.parseInt(levelNumber) }),
       })
 
-      if (!response.ok) throw new Error('Failed to create level')
+      if (response.ok) {
+        toast.success('Success', {
+          description: 'Level created successfully',
+        })
 
-      toast.success('Level created successfully')
-      router.push(`/admin/faculties/${facultyId}/departments/${departmentId}/levels`)
+        router.push(`/admin/faculties/${facultyId}/departments/${departmentId}/levels`)
+      } else {
+        const error = await response.json()
+        toast.error('Error', {
+          description: error.error || 'Failed to create level',
+        })
+      }
     } catch (error) {
       console.error(error)
-      toast.error('Failed to create level')
     } finally {
       setLoading(false)
     }

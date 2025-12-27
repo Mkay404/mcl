@@ -51,7 +51,6 @@ export default function NewFacultyPage() {
       }
     } catch (error) {
       console.error(error)
-      toast.error('Failed to create faculty')
     } finally {
       setLoading(false)
     }

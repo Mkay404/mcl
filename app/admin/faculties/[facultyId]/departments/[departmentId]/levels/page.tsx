@@ -86,7 +86,6 @@ export default function DepartmentLevelsPage() {
       await fetchData()
     } catch (error) {
       console.error(error)
-      toast.error('Failed to delete level')
     }
   }
 

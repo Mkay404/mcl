@@ -89,7 +89,6 @@ export default function LevelCoursesPage() {
       await fetchData()
     } catch (error) {
       console.error(error)
-      toast.error('Failed to delete course')
     }
   }
 

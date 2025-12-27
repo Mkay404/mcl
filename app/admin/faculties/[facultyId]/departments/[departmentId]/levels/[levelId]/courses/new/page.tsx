@@ -53,7 +53,6 @@ export default function NewCoursePage() {
       }
     } catch (error) {
       console.error(error)
-      toast.error('Failed to create course')
     } finally {
       setLoading(false)
     }
