@@ -15,8 +15,9 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
-const DEFAULT_TITLE = "My Campus Library"
-const DEFAULT_DESC = 'Empowering knowledge for every student — your library for study materials, past questions, and academic resources for effective learning.'
+const DEFAULT_TITLE = 'My Campus Library'
+const DEFAULT_DESC =
+  'Empowering knowledge for every student — your library for study materials, past questions, and academic resources for effective learning.'
 
 export const metadata: Metadata = {
   title: DEFAULT_TITLE,
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: '#182b5c',
-};
+}
 
 export default function RootLayout({
   children,
