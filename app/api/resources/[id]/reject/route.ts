@@ -46,9 +46,13 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       .eq('id', id)
 
     if (updateError) throw updateError
-
+    if (resource.users?.email && resource.users?.username) {
+    try {
     await sendRejectionEmail(resource.users.email, resource.users.username, resource.title, reason)
-
+    } catch (error) {
+      console.error('[API] Rejection email error:', error)
+    }
+    }
     return NextResponse.json({
       success: true,
       message: 'Resource rejected and user notified',
