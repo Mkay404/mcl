@@ -97,3 +97,7 @@ A: Yes, report via the help page or contact support.
 - **Security Issues**: [spectra010s@gmail.com](mailto:spectra010s@gmail.com)
 - **Partnerships**: [spectra010s@gmail.com](mailto:spectra010s@gmail.com)
 - **Report Abuse**: [spectra010s@gmail.com](mailto:spectra010s@gmail.com)
+
+---
+
+*Last updated: December 31, 2025*

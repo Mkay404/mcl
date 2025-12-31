@@ -110,4 +110,7 @@ Contributors will be recognized in:
 - Release notes for significant contributions
 - Project acknowledgments
 
-Thank you for contributing to My Campus Library!
+---
+> Thank you for contributing to My Campus Library!
+
+*Last updated: December 31, 2025*

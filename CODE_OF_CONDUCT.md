@@ -25,7 +25,8 @@ Examples of unacceptable behavior include:
 
 ## Enforcement
 
-Violations may be reported to conduct@mycampuslibrary.com. All reports will be reviewed and investigated. We will keep reporter identities confidential.
+Violations may be reported to [spectra01s@gmail.com](mailto:spectra01s@gmail.com)
+. All reports will be reviewed and investigated. We will keep reporter identities confidential.
 
 Consequences for unacceptable behavior include:
 
@@ -36,3 +37,7 @@ Consequences for unacceptable behavior include:
 ## Attribution
 
 This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.0.
+
+---
+
+*Last updated: December 31, 2025*
