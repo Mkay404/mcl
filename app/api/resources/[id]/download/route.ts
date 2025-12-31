@@ -49,8 +49,15 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       return NextResponse.json({ error: 'File fetch failed' }, { status: fileResponse.status })
     }
 
-    const extension = resource.file_type || 'pdf'
-    const filename = `${resource.title}`.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '').concat(`-MCL.${extension}`)
+    const fileUrl = resource.file_url
+    // Extract the file extension from the URL
+    const fileExtension = fileUrl.split('.').pop()?.split('?')[0] || 'pdf'
+    const extension = fileExtension.toLowerCase()
+
+    const filename = `${resource.title}`
+      .replace(/\s+/g, '-')
+      .replace(/[^a-zA-Z0-9-]/g, '')
+      .concat(`-MCL.${extension}`)
 
     return new NextResponse(fileResponse.body, {
       status: 200,

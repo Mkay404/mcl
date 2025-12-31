@@ -40,20 +40,18 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       console.error('[API] Update Error:', JSON.stringify(updateError, null, 2))
     }
 
-    
     if (resource.users?.email && resource.users?.username) {
-  try { 
-    await sendApprovalEmail(
-      resource.users.email,
-      resource.users.username,
-      resource.title,
-      resource.id,
-    )
-  } catch (error) {
-    console.error('[API] Email Error:', error)
-  }
-
-}
+      try {
+        await sendApprovalEmail(
+          resource.users.email,
+          resource.users.username,
+          resource.title,
+          resource.id,
+        )
+      } catch (error) {
+        console.error('[API] Email Error:', error)
+      }
+    }
     return NextResponse.json({
       success: true,
       message: 'Resource approved and user notified',
