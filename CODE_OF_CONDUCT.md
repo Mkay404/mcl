@@ -40,4 +40,4 @@ This Code of Conduct is adapted from the [Contributor Covenant](https://www.cont
 
 ---
 
-*Last updated: December 31, 2025*
+_Last updated: December 31, 2025_
