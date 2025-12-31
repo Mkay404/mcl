@@ -52,10 +52,12 @@ git add .
 git commit -m "feat: describe your changes clearly" -m "add more description if needed"
 git push origin feature/your-feature-name
 ```
+
 > Note: we use Vercel for deployments, To avoid wasting biuld minutes on no-code changes, please include `[skip deploy]` in your commit message.
 
-Example: 
-```bash 
+Example:
+
+```bash
 git commit -m "docs: fix typo in README [skip deploy]"
 ```
 
@@ -111,6 +113,7 @@ Contributors will be recognized in:
 - Project acknowledgments
 
 ---
+
 > Thank you for contributing to My Campus Library!
 
-*Last updated: December 31, 2025*
+_Last updated: December 31, 2025_

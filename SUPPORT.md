@@ -49,6 +49,7 @@ We're here to help! Find solutions to common issues and contact support.
 Found a security vulnerability? Please email [spectra010s@gmail.com](mailto:spectra010s@gmail.com) instead of using public issues.
 
 Include:
+
 - Description of the vulnerability
 - Steps to reproduce
 - Potential impact
@@ -100,4 +101,4 @@ A: Yes, report via the help page or contact support.
 
 ---
 
-*Last updated: December 31, 2025*
+_Last updated: December 31, 2025_

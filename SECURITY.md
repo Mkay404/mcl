@@ -31,4 +31,4 @@ If you discover a security vulnerability in My Campus Library, please report it 
 
 ---
 
-*Last updated: December 31, 2025*
+_Last updated: December 31, 2025_
