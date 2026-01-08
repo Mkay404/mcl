@@ -247,10 +247,8 @@ function LoginContent() {
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10 p-6 md:p-10">
-      <Suspense fallback={<div>Loading...</div>}>
-        <LoginContent />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   )
 }

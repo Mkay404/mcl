@@ -323,10 +323,8 @@ function SignUpContent() {
 
 export default function SignUpPage() {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10 p-6 md:p-10">
-      <Suspense fallback={<div>Loading...</div>}>
-        <SignUpContent />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignUpContent />
+    </Suspense>
   )
 }
