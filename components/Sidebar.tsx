@@ -81,12 +81,20 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
         {!loading && !user && (
           <div className="p-4 border-b border-sidebar-border">
             <div className="space-y-2">
-              <Link href={`/login?returnTo=${encodeURIComponent(pathname)}`} className="block" onClick={onMobileClose}>
+              <Link
+                href={`/login?returnTo=${encodeURIComponent(pathname)}`}
+                className="block"
+                onClick={onMobileClose}
+              >
                 <Button variant="outline" size="sm" className="w-full justify-start bg-transparent">
                   Log In
                 </Button>
               </Link>
-              <Link href={`/signup?returnTo=${encodeURIComponent(pathname)}`} className="block" onClick={onMobileClose}>
+              <Link
+                href={`/signup?returnTo=${encodeURIComponent(pathname)}`}
+                className="block"
+                onClick={onMobileClose}
+              >
                 <Button
                   size="sm"
                   className="w-full justify-start bg-sidebar-primary hover:bg-sidebar-primary/90"
