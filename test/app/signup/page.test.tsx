@@ -1,4 +1,3 @@
-
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import SignUp from '@/app/signup/page'
 import '@testing-library/jest-dom'
@@ -8,7 +7,7 @@ import { useSearchParams } from 'next/navigation'
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
   useSearchParams: vi.fn(),
-  useRouter: vi.fn(), 
+  useRouter: vi.fn(),
 }))
 
 // Mock supabase
@@ -62,17 +61,20 @@ describe('SignUpPage', () => {
   })
 
   it('renders "Continue to Library" link with returnTo after successful signup (simulated)', async () => {
-     // Note: Testing the exact state change to success UI is complex with mocks, 
-     // but we can verify the returnTo param is read correctly for the initial render 
-     // which impacts the success screen if logic is correct.
-     // For unit testing the success state specifically involves mocking the multiple 
-     // async steps in handleSignUp.
-     
-     // Instead, we verify the link back to Login page contains returnTo
-     ;(useSearchParams as Mock).mockReturnValue({ get: () => '/protected/resource' })
-     render(<SignUp />)
-     
-     const loginLink = screen.getByText('Sign in')
-     expect(loginLink.closest('a')).toHaveAttribute('href', '/login?returnTo=%2Fprotected%2Fresource')
+    // Note: Testing the exact state change to success UI is complex with mocks,
+    // but we can verify the returnTo param is read correctly for the initial render
+    // which impacts the success screen if logic is correct.
+    // For unit testing the success state specifically involves mocking the multiple
+    // async steps in handleSignUp.
+
+    // Instead, we verify the link back to Login page contains returnTo
+    ;(useSearchParams as Mock).mockReturnValue({ get: () => '/protected/resource' })
+    render(<SignUp />)
+
+    const loginLink = screen.getByText('Sign in')
+    expect(loginLink.closest('a')).toHaveAttribute(
+      'href',
+      '/login?returnTo=%2Fprotected%2Fresource',
+    )
   })
 })
