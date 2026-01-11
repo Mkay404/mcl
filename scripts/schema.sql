@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS resources (
   file_url VARCHAR(512) NOT NULL,
   file_type VARCHAR(50) NOT NULL,
   file_size_bytes BIGINT,
-  uploaded_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  uploaded_by UUID REFERENCES users(id) ON DELETE SET NULL,
   upload_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   view_count INTEGER DEFAULT 0,
