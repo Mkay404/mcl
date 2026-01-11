@@ -294,23 +294,21 @@ FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 CREATE OR REPLACE FUNCTION update_resource_search_vector_from_keywords()
 RETURNS TRIGGER AS $$
-DECLARE
-    keywords_string TEXT;
 BEGIN
-
-    SELECT STRING_AGG(keyword, ' ') INTO keywords_string
-    FROM resource_keywords 
-    WHERE resource_id = NEW.resource_id;
-
+    -- This just grabs all keywords for this file and smashes them into one sentence
     UPDATE resources
-    SET 
-      keyword_string = keywords_string, 
-      search_vector = setweight(to_tsvector('english', title), 'A') ||
-                      setweight(to_tsvector('english', coalesce(description, '')), 'B') ||
-                      setweight(to_tsvector('english', coalesce(keywords_string, '')), 'C')
-    WHERE id = NEW.resource_id;
+    SET keyword_string = (
+        SELECT STRING_AGG(keyword, ' ') 
+        FROM resource_keywords 
+        WHERE resource_id = COALESCE(NEW.resource_id, OLD.resource_id)
+    )
+    WHERE id = COALESCE(NEW.resource_id, OLD.resource_id);
 
-    RETURN NEW;
+    -- We DON'T calculate the search_vector here anymore. 
+    -- The other trigger on the resources table will see the 'keyword_string' change 
+    -- and do the calculation for us.
+
+    RETURN NULL; 
 END;
 $$ LANGUAGE plpgsql;
 
@@ -318,15 +316,54 @@ CREATE TRIGGER trigger_keywords_update_search_vector
 AFTER INSERT OR UPDATE OR DELETE ON resource_keywords
 FOR EACH ROW EXECUTE FUNCTION update_resource_search_vector_from_keywords();
 
+CREATE OR REPLACE FUNCTION resources_update_search_vector()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- This one line handles the logic for EVERY search update
+  NEW.search_vector := 
+    setweight(to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
+    setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B') ||
+    setweight(to_tsvector('english', coalesce(NEW.keyword_string, '')), 'C');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Now, attach it to the resources table
+CREATE OR REPLACE TRIGGER trigger_resources_update_search_vector
+BEFORE INSERT OR UPDATE OF title, description, keyword_string ON resources
+FOR EACH ROW EXECUTE FUNCTION resources_update_search_vector();
+
 CREATE OR REPLACE FUNCTION search_resources_fts(search_term text)
 RETURNS SETOF resources AS $$
-SELECT *
-FROM resources
-WHERE is_approved = TRUE
-  AND search_vector @@ plainto_tsquery('english', search_term)
-ORDER BY ts_rank_cd(search_vector, plainto_tsquery('english', search_term)) DESC
-LIMIT 50;
-$$ LANGUAGE SQL STABLE;
+DECLARE
+  formatted_query text;
+BEGIN
+  -- 1. Check if search_term is empty or just spaces
+  IF trim(search_term) = '' THEN
+    RETURN;
+  END IF;
+
+  -- 2. This creates the 'ILIKE' behavior for multiple words
+  SELECT string_agg(lexeme || ':*', ' & ') INTO formatted_query
+  FROM unnest(to_tsvector('english', search_term));
+
+  RETURN QUERY
+  SELECT *
+  FROM resources
+  WHERE is_approved = TRUE
+    AND (
+      -- Primary: Smart search (handles phrases, quotes, etc.)
+      search_vector @@ websearch_to_tsquery('english', search_term)
+      OR 
+      -- Secondary: Prefix matching (the 'ILIKE' behavior)
+      search_vector @@ to_tsquery('english', formatted_query)
+    )
+  ORDER BY 
+    ts_rank_cd(search_vector, websearch_to_tsquery('english', search_term)) DESC
+  LIMIT 50;
+END;
+$$ LANGUAGE plpgsql STABLE;
+
 
 CREATE OR REPLACE FUNCTION search_resources_keywords_fuzzy(search_term text)
 RETURNS SETOF resources AS $$

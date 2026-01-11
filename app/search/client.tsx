@@ -36,6 +36,10 @@ interface Resource {
   }[]
 }
 
+interface DbResource extends Resource {
+  user_bookmarks: { user_id: string }[] | null
+}
+
 type InputEvent = React.ChangeEvent<HTMLInputElement>
 
 export default function SearchClient() {
@@ -73,7 +77,6 @@ export default function SearchClient() {
 
     const performSearch = async () => {
       setLoading(true)
-      let finalResults = []
 
       try {
         // Search across multiple fields: title, description, course_code, keywords
@@ -92,70 +95,43 @@ export default function SearchClient() {
         const userId = user?.id
 
         const ResourceQuery = `
-    id,
-    title,
-    description,
-    file_type,
-    file_size_bytes,
-    view_count,
-    download_count,
-    bookmark_count,
-    user_bookmarks(user_id),
-    courses(
-        id,
-        course_code,
-        course_title,
-        academic_levels(
-            level_number,
-            departments(
-                id,
-                full_name,
-                faculty_id
+        *,
+        user_bookmarks(user_id),
+        courses(
+            id,
+            course_code,
+            course_title,
+            academic_levels(
+                level_number,
+                departments(id, full_name, faculty_id)
             )
         )
-    ),
-    resource_keywords(keyword)
-`
+      `
 
         // --- PRIMARY SEARCH ATTEMPT: FTS ---
-
-        const { data, error } = await supabase
+        let { data, error } = await supabase
           .rpc('search_resources_fts', { search_term: query })
           .select(ResourceQuery)
-          .limit(50)
 
-        if (error) throw error
-
-        finalResults = Array.isArray(data) ? data : data ? [data] : []
-
-        // --- SECONDARY SEARCH ATTEMPT: Fuzzy ---
-        if (finalResults.length === 0) {
-          const fuzzyResponse = await supabase
+        // --- SECONDARY SEARCH: Fuzzy (The Safety Net) ---
+        // Only run if FTS found nothing (handles typos)
+        if (!error && (!data || data.length === 0)) {
+          const fuzzy = await supabase
             .rpc('search_resources_keywords_fuzzy', { search_term: query })
             .select(ResourceQuery)
-            .limit(50)
 
-          if (fuzzyResponse.error) throw fuzzyResponse.error
-
-          finalResults = Array.isArray(fuzzyResponse.data)
-            ? fuzzyResponse.data
-            : fuzzyResponse.data
-              ? [fuzzyResponse.data]
-              : []
+          data = fuzzy.data
+          error = fuzzy.error
         }
 
-        const processedResults = finalResults.map(resource => {
-          const isBookmarked =
-            !!userId && !!resource.user_bookmarks && resource.user_bookmarks.length > 0
+        if (error) throw error
+        const processed: Resource[] = ((data as DbResource[]) || []).map(res => ({
+          ...res,
+          isBookmarked: !!user && (res.user_bookmarks?.some(b => b.user_id === user.id) ?? false),
+          user_bookmarks: undefined,
+        }))
 
-          return {
-            ...resource,
-            isBookmarked: isBookmarked,
-            user_bookmarks: undefined,
-          }
-        })
-
-        setResults(processedResults)
+        setResults(processed)
       } catch (error) {
         console.error('Search error:', error)
       } finally {
