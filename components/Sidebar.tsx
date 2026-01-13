@@ -5,7 +5,16 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
-import { BookOpen, Plus, Settings, Github, FileText, Folder, HelpCircle } from 'lucide-react'
+import {
+  BookOpen,
+  Plus,
+  Settings,
+  Github,
+  FileText,
+  Folder,
+  HelpCircle,
+  Shield,
+} from 'lucide-react'
 import { User } from '@supabase/supabase-js'
 
 interface SidebarProps {
@@ -13,8 +22,15 @@ interface SidebarProps {
   onMobileClose?: () => void
 }
 
+type UserRole = 'admin' | 'user'
+
+interface DbUser {
+  id: string
+  role: UserRole
+}
+
 export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<DbUser | null>(null)
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
   const pathname = usePathname()
@@ -22,14 +38,30 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
 
   useEffect(() => {
     const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      setUser(user)
-      setLoading(false)
+      try {
+        const {
+          data: { user: authUser },
+        } = await supabase.auth.getUser()
+
+        if (authUser) {
+          const { data: userRole } = await supabase
+            .from('users')
+            .select('id, role')
+            .eq('id', authUser.id)
+            .single()
+
+          setUser(userRole)
+        } else {
+          setUser(null)
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error)
+      } finally {
+        setLoading(false)
+      }
     }
     getUser()
-  }, [supabase])
+  }, [])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -187,7 +219,20 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
             </div>
           </div>
         </div>
-
+        {/* Admin page for admins */}
+        {user?.role === 'admin' && (
+          <div className="mt-3 p-4 space-y-2">
+            <div className="bg-sidebar-border border-t-2"></div>
+            <Link
+              href="/admin"
+              className="flex items-center gap-2 text-sm text-sidebar-foreground hover:text-sidebar-primary"
+              onClick={onMobileClose}
+            >
+              <Shield className="w-4 h-4" />
+              Admin Panel
+            </Link>
+          </div>
+        )}
         {/* Settings - Only if Logged In */}
         {user && (
           <div className="mt-3 p-4 space-y-2">
