@@ -219,24 +219,25 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
             </div>
           </div>
         </div>
-        {/* Admin page for admins */}
-        {user?.role === 'admin' && (
-          <div className="mt-3 p-4 space-y-2">
-            <div className="bg-sidebar-border border-t-2"></div>
-            <Link
-              href="/admin"
-              className="flex items-center gap-2 text-sm text-sidebar-foreground hover:text-sidebar-primary"
-              onClick={onMobileClose}
-            >
-              <Shield className="w-4 h-4" />
-              Admin Panel
-            </Link>
-          </div>
-        )}
-        {/* Settings - Only if Logged In */}
+
         {user && (
-          <div className="mt-3 p-4 space-y-2">
-            <div className="bg-sidebar-border border-t-2"></div>
+          <div className="px-4 py-2">
+            {/* Admin page for admins */}
+            {user.role === 'admin' && (
+              <Link
+                href="/admin"
+                className="flex items-center gap-2 text-sm text-sidebar-foreground hover:text-sidebar-primary pb-2"
+                onClick={onMobileClose}
+              >
+                <Shield className="w-4 h-4" />
+                Admin Panel
+              </Link>
+            )}
+
+            <hr className="border-sidebar-border border-t-2 mb-3" />
+
+            {/* Settings - Only if Logged In */}
+
             <Link
               href="/settings"
               className="flex items-center gap-2 text-sm text-sidebar-foreground hover:text-sidebar-primary"
