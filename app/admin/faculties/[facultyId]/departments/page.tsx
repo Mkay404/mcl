@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Plus, Trash2, ArrowLeft, Building2 } from 'lucide-react'
+import { Plus, Trash2, ArrowLeft, Building2, Edit } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -143,17 +143,29 @@ export default function DepartmentsPage() {
               <CardHeader>
                 <CardTitle className="flex items-start justify-between">
                   <span className="text-xl">{dept.full_name}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                    onClick={() => {
-                      setDeptToDelete(dept)
-                      setDeleteDialogOpen(true)
-                    }}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-blue-600 hover:text-blue-600 hover:bg-blue-50"
+                      asChild
+                    >
+                      <Link href={`/admin/faculties/${facultyId}/departments/${dept.id}/edit`}>
+                        <Edit className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                      onClick={() => {
+                        setDeptToDelete(dept)
+                        setDeleteDialogOpen(true)
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </CardTitle>
 
                 <CardDescription className="font-medium">{dept.short_name}</CardDescription>
