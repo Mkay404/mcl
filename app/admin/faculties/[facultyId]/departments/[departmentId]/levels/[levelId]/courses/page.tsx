@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Plus, ArrowLeft, Trash2 } from 'lucide-react'
+import { Plus, ArrowLeft, Trash2, Edit } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { useParams } from 'next/navigation'
@@ -132,17 +132,31 @@ export default function LevelCoursesPage() {
               <CardHeader>
                 <CardTitle className="flex items-start justify-between">
                   <span className="flex-1">{course.course_code}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-destructive"
-                    onClick={() => {
-                      setCourseToDelete(course)
-                      setDeleteDialogOpen(true)
-                    }}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-blue-600 hover:text-blue-600 hover:bg-blue-50"
+                      asChild
+                    >
+                      <Link
+                        href={`/admin/faculties/${facultyId}/departments/${departmentId}/levels/${levelId}/courses/${course.id}/edit`}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-destructive"
+                      onClick={() => {
+                        setCourseToDelete(course)
+                        setDeleteDialogOpen(true)
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </CardTitle>
                 <CardDescription>{course.course_title}</CardDescription>
               </CardHeader>
