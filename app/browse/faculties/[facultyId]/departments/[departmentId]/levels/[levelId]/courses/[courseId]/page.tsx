@@ -152,12 +152,16 @@ export default async function CourseDetailPage(props: PageProps) {
           <p className="text-sm text-muted-foreground">
             {approvedResources.length} resource{approvedResources.length !== 1 ? 's' : ''} available
           </p>
-          <span className="text-muted-foreground">•</span>
-          <Link href={`/cbt/${courseId}`}>
-            <Button variant="default" size="sm">
-              Test Your Knowledge
-            </Button>
-          </Link>
+          {cbts.length > 0 && (
+            <>
+              <span className="text-muted-foreground">•</span>
+              <Link href={`/cbts/${cbts[0].id}`}>
+                <Button variant="default" size="sm">
+                  Test Your Knowledge
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
