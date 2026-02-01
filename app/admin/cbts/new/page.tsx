@@ -46,7 +46,8 @@ export default function NewCBTPage() {
   const [levels, setLevels] = useState<Level[]>([])
   const [courses, setCourses] = useState<Course[]>([])
 
-  const [loading, setLoading] = useState(true)
+  const [isLoadingPage, setIsLoadingPage] = useState(true)
+  const [isFetching, setIsFetching] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
   const [selectedFaculty, setSelectedFaculty] = useState<string>('')
@@ -63,6 +64,7 @@ export default function NewCBTPage() {
 
   useEffect(() => {
     const fetchFaculties = async () => {
+      setIsLoadingPage(true)
       try {
         const response = await fetch('/api/admin/faculties', { cache: 'no-store' })
         if (response.ok) {
@@ -73,7 +75,7 @@ export default function NewCBTPage() {
         console.error('Error fetching faculties:', error)
         toast.error('Failed to load faculties')
       } finally {
-        setLoading(false)
+        setIsLoadingPage(false)
       }
     }
     fetchFaculties()
@@ -89,6 +91,7 @@ export default function NewCBTPage() {
     setCourses([])
 
     if (facultyId) {
+      setIsFetching(true)
       try {
         const response = await fetch(`/api/admin/faculties/${facultyId}/departments`)
         if (response.ok) {
@@ -97,6 +100,8 @@ export default function NewCBTPage() {
         }
       } catch (error) {
         console.error('Error fetching departments:', error)
+      } finally {
+        setIsFetching(false)
       }
     }
   }
@@ -109,6 +114,7 @@ export default function NewCBTPage() {
     setCourses([])
 
     if (deptId) {
+      setIsFetching(true)
       try {
         const response = await fetch(`/api/admin/departments/${deptId}/levels`)
         if (response.ok) {
@@ -117,6 +123,8 @@ export default function NewCBTPage() {
         }
       } catch (error) {
         console.error('Error fetching levels:', error)
+      } finally {
+        setIsFetching(false)
       }
     }
   }
@@ -127,6 +135,7 @@ export default function NewCBTPage() {
     setCourses([])
 
     if (levelId) {
+      setIsFetching(true)
       try {
         const response = await fetch(`/api/admin/levels/${levelId}/courses`)
         if (response.ok) {
@@ -135,6 +144,8 @@ export default function NewCBTPage() {
         }
       } catch (error) {
         console.error('Error fetching courses:', error)
+      } finally {
+        setIsFetching(false)
       }
     }
   }
@@ -172,8 +183,8 @@ export default function NewCBTPage() {
     }
   }
 
-  if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>
+  if (isLoadingPage) {
+    return <div className="flex items-center justify-center min-h-screen">Loading Page...</div>
   }
 
   return (
@@ -209,13 +220,15 @@ export default function NewCBTPage() {
                 <div className="space-y-2">
                   <Label>Faculty *</Label>
                   <Select value={selectedFaculty} onValueChange={handleFacultyChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Faculty" />
                     </SelectTrigger>
                     <SelectContent>
                       {faculties.map(f => (
                         <SelectItem key={f.id} value={String(f.id)}>
-                          {f.full_name}
+                          <span className="truncate block max-w-[200px] md:max-w-xs">
+                            {f.full_name}
+                          </span>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -223,19 +236,28 @@ export default function NewCBTPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Department *</Label>
+                  <Label htmlFor="department">Department *</Label>
                   <Select
                     value={selectedDepartment}
                     onValueChange={handleDeptChange}
                     disabled={!selectedFaculty}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Department" />
+                    <SelectTrigger className="w-full">
+                      <SelectValue
+                        placeholder={selectedFaculty ? 'Select Department' : 'Select faculty first'}
+                      />
                     </SelectTrigger>
                     <SelectContent>
+                      {isFetching && !selectedDepartment && (
+                        <div className="flex items-center justify-center py-2">
+                          <div className="animate-spin border-2 border-primary/20 border-t-primary rounded-full w-4 h-4" />
+                        </div>
+                      )}
                       {departments.map(d => (
                         <SelectItem key={d.id} value={String(d.id)}>
-                          {d.full_name}
+                          <span className="truncate block max-w-[200px] md:max-w-xs">
+                            {d.full_name}
+                          </span>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -243,16 +265,25 @@ export default function NewCBTPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Academic Level *</Label>
+                  <Label htmlFor="level">Academic Level *</Label>
                   <Select
                     value={selectedLevel}
                     onValueChange={handleLevelChange}
                     disabled={!selectedDepartment}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Level" />
+                    <SelectTrigger className="w-full">
+                      <SelectValue
+                        placeholder={
+                          selectedDepartment ? 'Select Level' : 'Select department first'
+                        }
+                      />
                     </SelectTrigger>
                     <SelectContent>
+                      {isFetching && !selectedLevel && selectedDepartment && (
+                        <div className="flex items-center justify-center py-2">
+                          <div className="animate-spin border-2 border-primary/20 border-t-primary rounded-full w-4 h-4" />
+                        </div>
+                      )}
                       {levels.map(l => (
                         <SelectItem key={l.id} value={String(l.id)}>
                           {l.level_number} Level
@@ -263,19 +294,28 @@ export default function NewCBTPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Course *</Label>
+                  <Label htmlFor="course">Course *</Label>
                   <Select
                     value={formData.courseId}
                     onValueChange={value => setFormData({ ...formData, courseId: value })}
                     disabled={!selectedLevel}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Course" />
+                    <SelectTrigger className="w-full">
+                      <SelectValue
+                        placeholder={selectedLevel ? 'Select Course' : 'Select level first'}
+                      />
                     </SelectTrigger>
                     <SelectContent>
+                      {isFetching && !formData.courseId && selectedLevel && (
+                        <div className="flex items-center justify-center py-2">
+                          <div className="animate-spin border-2 border-primary/20 border-t-primary rounded-full w-4 h-4" />
+                        </div>
+                      )}
                       {courses.map(c => (
                         <SelectItem key={c.id} value={String(c.id)}>
-                          {c.course_code}: {c.course_title}
+                          <span className="truncate block max-w-[200px] md:max-w-xs">
+                            {c.course_code}: {c.course_title}
+                          </span>
                         </SelectItem>
                       ))}
                     </SelectContent>

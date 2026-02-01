@@ -48,6 +48,7 @@ export default function UploadPage() {
   const [course, setCourse] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
   const [dragging, setDragging] = useState(false)
   const [faculties, setFaculties] = useState<Faculty[]>([])
   const [departments, setDepartments] = useState<Department[]>([])
@@ -76,14 +77,19 @@ export default function UploadPage() {
     setLevel('')
 
     if (facultyId) {
-      const { data: deptData } = await supabase
-        .from('departments')
-        .select('id, full_name')
-        .eq('faculty_id', facultyId)
-        .order('full_name')
+      setIsFetching(true)
+      try {
+        const { data: deptData } = await supabase
+          .from('departments')
+          .select('id, full_name')
+          .eq('faculty_id', facultyId)
+          .order('full_name')
 
-      if (deptData) {
-        setDepartments(deptData)
+        if (deptData) {
+          setDepartments(deptData)
+        }
+      } finally {
+        setIsFetching(false)
       }
     }
   }
@@ -93,14 +99,19 @@ export default function UploadPage() {
     setLevel('')
 
     if (departmentId) {
-      const { data: levelData } = await supabase
-        .from('academic_levels')
-        .select('id, level_number')
-        .eq('department_id', departmentId)
-        .order('level_number')
+      setIsFetching(true)
+      try {
+        const { data: levelData } = await supabase
+          .from('academic_levels')
+          .select('id, level_number')
+          .eq('department_id', departmentId)
+          .order('level_number')
 
-      if (levelData) {
-        setLevels(levelData)
+        if (levelData) {
+          setLevels(levelData)
+        }
+      } finally {
+        setIsFetching(false)
       }
     }
   }
@@ -110,14 +121,19 @@ export default function UploadPage() {
     setCourse('')
 
     if (levelId) {
-      const { data: CourseData } = await supabase
-        .from('courses')
-        .select('id, course_code')
-        .eq('academic_level_id', levelId)
-        .order('course_code')
+      setIsFetching(true)
+      try {
+        const { data: CourseData } = await supabase
+          .from('courses')
+          .select('id, course_code')
+          .eq('academic_level_id', levelId)
+          .order('course_code')
 
-      if (CourseData) {
-        setCourses(CourseData)
+        if (CourseData) {
+          setCourses(CourseData)
+        }
+      } finally {
+        setIsFetching(false)
       }
     }
   }
@@ -321,10 +337,15 @@ export default function UploadPage() {
                 <Select value={department} onValueChange={handleDeptChange} disabled={!faculty}>
                   <SelectTrigger className="border-primary/30">
                     <SelectValue
-                      placeholder={faculty ? 'choose department' : 'Select faculty first'}
+                      placeholder={faculty ? 'Select Department' : 'Select faculty first'}
                     />
                   </SelectTrigger>
                   <SelectContent>
+                    {isFetching && !department && faculty && (
+                      <div className="flex items-center justify-center py-2">
+                        <div className="w-4 h-4 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
+                      </div>
+                    )}
                     {departments.map(d => (
                       <SelectItem key={d.id} value={String(d.id)}>
                         {d.full_name}
@@ -339,10 +360,15 @@ export default function UploadPage() {
                 <Select value={level} onValueChange={handleLevelChange} disabled={!department}>
                   <SelectTrigger className="border-primary/30">
                     <SelectValue
-                      placeholder={department ? 'choose level' : 'Select department first'}
+                      placeholder={department ? 'Select Academic Level' : 'Select department first'}
                     />
                   </SelectTrigger>
                   <SelectContent>
+                    {isFetching && !level && department && (
+                      <div className="flex items-center justify-center py-2">
+                        <div className="w-4 h-4 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
+                      </div>
+                    )}
                     {levels.map(l => (
                       <SelectItem key={l.id} value={String(l.id)}>
                         {l.level_number}
@@ -352,12 +378,17 @@ export default function UploadPage() {
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="courses">Select Course *</Label>
+                <Label htmlFor="course">Select Course *</Label>
                 <Select value={course} onValueChange={setCourse} disabled={!level}>
                   <SelectTrigger className="border-primary/30">
-                    <SelectValue placeholder={level ? 'choose course' : 'Select level first'} />
+                    <SelectValue placeholder={level ? 'Select Course' : 'Select level first'} />
                   </SelectTrigger>
                   <SelectContent>
+                    {isFetching && !course && level && (
+                      <div className="flex items-center justify-center py-2">
+                        <div className="w-4 h-4 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
+                      </div>
+                    )}
                     {courses.map(c => (
                       <SelectItem key={c.id} value={String(c.id)}>
                         {c.course_code}
