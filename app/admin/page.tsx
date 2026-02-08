@@ -7,13 +7,14 @@ type Stats = {
   totalDownloads: number
   totalViews: number
   pendingReviews: number
+  totalCBTs: number
 }
 
 async function getStats(): Promise<Stats | null> {
   try {
     const supabase = await createClient()
 
-    const [resourceResult, userResult, downloadResult, viewResult, pendingResult] =
+    const [resourceResult, userResult, downloadResult, viewResult, pendingResult, cbtResult] =
       await Promise.all([
         supabase.from('resources').select('*', { count: 'exact', head: true }),
         supabase.from('users').select('*', { count: 'exact', head: true }),
@@ -23,6 +24,7 @@ async function getStats(): Promise<Stats | null> {
           .from('resources')
           .select('*', { count: 'exact', head: true })
           .eq('is_approved', false),
+        supabase.from('cbts').select('*', { count: 'exact', head: true }),
       ])
 
     return {
@@ -31,6 +33,7 @@ async function getStats(): Promise<Stats | null> {
       totalDownloads: downloadResult.count || 0,
       totalViews: viewResult.count || 0,
       pendingReviews: pendingResult.count || 0,
+      totalCBTs: cbtResult.count || 0,
     }
   } catch (error) {
     console.error('Error fetching stats:', error)
