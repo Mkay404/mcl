@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { FileText, Users, Download, Eye, Clock, CheckCircle } from 'lucide-react'
+import { FileText, Users, Download, Eye, Clock, CheckCircle, ClipboardList } from 'lucide-react'
 
 type Stats = {
   totalResources: number
@@ -9,6 +9,7 @@ type Stats = {
   totalDownloads: number
   totalViews: number
   pendingReviews: number
+  totalCBTs: number
 } | null
 
 export default function AdminStats({ stats }: { stats: Stats }) {
@@ -18,12 +19,13 @@ export default function AdminStats({ stats }: { stats: Stats }) {
     totalDownloads: 0,
     totalViews: 0,
     pendingReviews: 0,
+    totalCBTs: 0,
   }
 
   return (
     <main className="p-6 max-w-7xl mx-auto">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
         <Card>
           <CardHeader className="pb-2">
             <CardDescription className="flex items-center gap-2">
@@ -83,6 +85,18 @@ export default function AdminStats({ stats }: { stats: Stats }) {
             <p className="text-3xl font-bold text-primary">{displayStats.pendingReviews}</p>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardDescription className="flex items-center gap-2">
+              <ClipboardList className="w-4 h-4" />
+              Total CBTs
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold">{displayStats.totalCBTs}</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Quick Actions */}
@@ -135,6 +149,21 @@ export default function AdminStats({ stats }: { stats: Stats }) {
           <CardContent>
             <Button asChild className="w-full" variant="outline">
               <Link href="/admin/faculties">Manage Content</Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ClipboardList className="w-5 h-5" />
+              Manage CBTs
+            </CardTitle>
+            <CardDescription>Create and manage computer-based tests</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild className="w-full" variant="outline">
+              <Link href="/admin/cbts">Manage CBTs</Link>
             </Button>
           </CardContent>
         </Card>
