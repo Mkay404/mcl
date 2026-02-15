@@ -14,6 +14,7 @@ import {
   Folder,
   HelpCircle,
   Shield,
+  Monitor,
 } from 'lucide-react'
 import { User } from '@supabase/supabase-js'
 
@@ -154,6 +155,24 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
                 onClick={onMobileClose}
               >
                 Faculties
+              </Link>
+            </div>
+          </div>
+
+          {/* CBTs Section */}
+          <div>
+            <h3 className="text-sm font-semibold text-sidebar-foreground mb-3 flex items-center gap-1">
+              <Monitor className="w-4 h-4" />
+              CBTs
+            </h3>
+            <div className="bg-sidebar-border border-t-2"></div>
+            <div className="mt-3 space-y-2 pl-4">
+              <Link
+                href="/cbts"
+                className="text-sm text-sidebar-foreground/70 hover:text-sidebar-primary block"
+                onClick={onMobileClose}
+              >
+                Practice CBTs
               </Link>
             </div>
           </div>
